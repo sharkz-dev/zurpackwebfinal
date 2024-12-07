@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useCart } from '../context/CartContext';
-import { X, Send, ChevronDown, Building2, User } from 'lucide-react';
+import { X, Send, ChevronDown, Building2, User, Check } from 'lucide-react';
 
 const QuotationForm = ({ onClose, onSuccess }) => {
   const { cartItems, clearCart } = useCart();
@@ -154,46 +154,49 @@ const QuotationForm = ({ onClose, onSuccess }) => {
   };
 
   return (
-<div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full p-6">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Solicitud de Cotización</h2>
-          <button
-  onClick={onClose}
-  className="p-1.5 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
->
-  <X className="w-6 h-6" />
-</button>
-        </div>
-
-        {error && (
-          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg animate-fade-in-up">
-            {error}
+    <div className="fixed inset-0 bg-black/50 z-50 overflow-y-auto">
+      {/* Contenedor principal con padding y scroll */}
+      <div className="min-h-full flex items-center justify-center p-4 py-8">
+        <div className="bg-white rounded-lg max-w-2xl w-full">
+          {/* Header */}
+          <div className="sticky top-0 flex justify-between items-center p-6 border-b bg-white rounded-t-lg">
+            <h2 className="text-2xl font-bold text-gray-900">
+              Solicitud de Cotización
+            </h2>
+            <button
+              onClick={onClose}
+              className="p-1.5 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
           </div>
-        )}
 
-{success ? (
-  <div className="text-center p-8 animate-fade-in">
-    <div className="mb-6">
-      <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
-        <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-    </div>
-    <div className="text-2xl font-bold text-green-600 mb-3">
-      ¡Cotización enviada exitosamente!
-    </div>
-    <p className="text-gray-600 text-lg mb-6">
-      Nos pondremos en contacto contigo pronto.
-    </p>
-    <p className="text-sm text-gray-500">
-      Esta ventana se cerrará automáticamente en unos segundos...
-    </p>
-  </div>
-) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="px-6 py-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+            {error && (
+              <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg animate-fade-in-up">
+                {error}
+              </div>
+            )}
+
+            {success ? (
+              <div className="text-center p-8 animate-fade-in">
+                <div className="mb-6">
+                  <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="w-8 h-8 text-green-500" />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-green-600 mb-3">
+                  ¡Cotización enviada exitosamente!
+                </div>
+                <p className="text-gray-600 text-lg mb-6">
+                  Nos pondremos en contacto contigo pronto.
+                </p>
+                <p className="text-sm text-gray-500">
+                  Esta ventana se cerrará automáticamente en unos segundos...
+                </p>
+              </div>
+            ) : (
+              <form id="quotation-form" onSubmit={handleSubmit} className="space-y-6">
             {/* Selector de tipo de cliente */}
             <div className="flex gap-4 mb-6">
               <button
@@ -393,13 +396,18 @@ const QuotationForm = ({ onClose, onSuccess }) => {
                 ))}
               </div>
             </div>
-
+          </form>
+        )}
+      </div>
+      {!success && (
+          <div className="sticky bottom-0 p-6 bg-white border-t rounded-b-lg">
             <button
               type="submit"
+              form="quotation-form" // Asegúrate de añadir id="quotation-form" al form
               disabled={loading}
-              className="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600 
-                       disabled:opacity-50 disabled:cursor-not-allowed
-                       transition-colors duration-200 flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     transition-colors duration-200 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -413,11 +421,12 @@ const QuotationForm = ({ onClose, onSuccess }) => {
                 </>
               )}
             </button>
-          </form>
+          </div>
         )}
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default QuotationForm;

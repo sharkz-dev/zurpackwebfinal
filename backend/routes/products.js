@@ -315,4 +315,45 @@ router.delete('/:id', protect, async (req, res) => {
   }
 });
 
+//Buscar productos
+router.get('/search', async (req, res) => {
+  try {
+    const { name, category } = req.query;
+    
+    if (!name || name.length < 1) {
+      return res.json([]);
+    }
+
+    let categoryQuery = {};
+    if (category) {
+      const categoryObj = await Category.findOne({ 
+        slug: category,
+        active: true 
+      });
+      if (categoryObj) {
+        categoryQuery.category = categoryObj._id;
+      }
+    }
+
+    // Buscar coincidencias usando el regex para subcadena continua
+    const products = await Product.find({
+      name: { $regex: name, $options: 'i' },
+      ...categoryQuery
+    })
+    .populate({
+      path: 'category',
+      select: 'name slug',
+      match: { active: true }
+    })
+    .sort('-createdAt')
+    .limit(10);
+
+    const filteredProducts = products.filter(product => product.category);
+    res.json(filteredProducts);
+  } catch (error) {
+    console.error('Error en búsqueda:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

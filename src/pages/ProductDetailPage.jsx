@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Plus, Minus, Package, Box } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -17,6 +17,7 @@ const ProductDetailPage = ({ showCart, setShowCart }) => {
   const [showQuotationForm, setShowQuotationForm] = useState(false);
   const [addMessage, setAddMessage] = useState(null);
   const { addToCart, cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
+  const variantSelectRef = useRef(null); 
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -49,9 +50,8 @@ const ProductDetailPage = ({ showCart, setShowCart }) => {
   const handleAddToCart = () => {
     if (product.hasSizeVariants && !selectedSize) {
       setAddMessage('Por favor seleccione una variante');
-      const selectElement = document.querySelector('select');
-      if (selectElement) {
-        selectElement.focus();
+      if (variantSelectRef.current) {
+        variantSelectRef.current.focus();
       }
       setTimeout(() => setAddMessage(null), 3000);
       return;
@@ -176,9 +176,14 @@ const ProductDetailPage = ({ showCart, setShowCart }) => {
                     Variantes
                   </label>
                   <select
+                    ref={variantSelectRef}
                     value={selectedSize}
                     onChange={(e) => setSelectedSize(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors duration-200"
+                    className={`w-full p-3 border rounded-lg transition-colors duration-200 ${
+                      addMessage && !selectedSize 
+                        ? 'border-red-500 ring-2 ring-red-200 focus:ring-red-500 focus:border-red-500'
+                        : 'border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent'
+                    }`}
                   >
                     <option value="">Variantes</option>
                     {product.sizeVariants

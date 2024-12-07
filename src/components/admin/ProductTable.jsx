@@ -3,9 +3,9 @@ import { Pencil, Trash2, Star, Search } from 'lucide-react';
 
 const ProductCard = ({ product, onEdit, onDelete }) => (
   <div className="bg-white rounded-lg shadow-sm hover:shadow p-4">
-    <div className="flex gap-4">
+    <div className="flex flex-col sm:flex-row gap-4">
       {/* Imagen del producto */}
-      <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+      <div className="w-full sm:w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
         <img
           src={product.imageUrl}
           alt={product.name}
@@ -15,7 +15,7 @@ const ProductCard = ({ product, onEdit, onDelete }) => (
 
       {/* Información del producto */}
       <div className="flex-1 min-w-0">
-        <div className="flex justify-between items-start">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
           <div>
             <div className="flex items-center gap-2">
               <h3 className="font-medium text-gray-900 truncate">{product.name}</h3>
@@ -27,20 +27,22 @@ const ProductCard = ({ product, onEdit, onDelete }) => (
               {product.category ? product.category.name : 'Sin categoría'}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 self-end sm:self-start">
             <button
               onClick={() => onEdit(product)}
-              className="p-1 text-blue-500 hover:bg-blue-50 rounded-full"
+              className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg flex items-center gap-1"
               title="Editar"
             >
               <Pencil className="w-5 h-5" />
+              <span className="text-sm sm:hidden">Editar</span>
             </button>
             <button
               onClick={() => onDelete(product._id)}
-              className="p-1 text-red-500 hover:bg-red-50 rounded-full"
+              className="p-2 text-red-500 hover:bg-red-50 rounded-lg flex items-center gap-1"
               title="Eliminar"
             >
               <Trash2 className="w-5 h-5" />
+              <span className="text-sm sm:hidden">Eliminar</span>
             </button>
           </div>
         </div>

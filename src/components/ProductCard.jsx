@@ -142,17 +142,21 @@ const ProductCard = ({
         </div>
       </div>
 
-      {/* Contenido */}
-      <div className="p-4 flex-1 flex flex-col">
+{/* Contenido */}
+<div className="p-4 flex-1 flex flex-col">
         {/* Título y categoría */}
         <div className="mb-3">
           <h3 
-            className="text-lg font-semibold text-gray-900 hover:text-green-600 transition-colors cursor-pointer line-clamp-2"
+            className="text-lg font-semibold text-gray-900 hover:text-green-600 transition-colors cursor-pointer md:whitespace-nowrap line-clamp-2 md:line-clamp-none"
             onClick={() => navigate(`/catalogo/${categorySlug}/${product.slug}`)}
+            style={{
+              fontSize: `${Math.min(1.125, 15 / (product.name.length) * 1.125)}rem`,
+              maxWidth: 'calc(100% - 0.5rem)'
+            }}
           >
             {product.name}
           </h3>
-          <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+          <span className="inline-block mt-1 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
             {product.category?.name || 'Sin categoría'}
           </span>
         </div>

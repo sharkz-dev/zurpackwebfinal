@@ -122,30 +122,6 @@ const About = ({ showCart: propShowCart, setShowCart: propSetShowCart }) => {
         </div>
       </div>
 
-      {/* Equipo Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Nuestro Equipo</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {team.map((member, index) => (
-            <div 
-              key={index}
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-            >
-              <img
-                src={member.image}
-                alt={member.name}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
-                <p className="text-green-600 font-medium mb-2">{member.position}</p>
-                <p className="text-gray-600">{member.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Stats Section */}
       <div className="bg-green-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

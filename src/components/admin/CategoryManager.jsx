@@ -164,7 +164,7 @@ const CategoryManager = ({
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Gestión de Categorías</h2>
+        <h2 className="text-xl font-semibold">Categorías</h2>
         <button
           onClick={() => setShowForm(true)}
           className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"

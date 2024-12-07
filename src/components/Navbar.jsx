@@ -9,14 +9,16 @@ import {
   LayoutGrid,
   Users,
   MessageSquare,
-  Home
+  Search
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import Login from './Login';
+import SearchBar from './SearchBar';
 
 const Navbar = ({ setShowCart, showCart }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false); 
   const [showLogin, setShowLogin] = useState(false);
   const { admin, logout } = useAuth();
   const { getUniqueItemsCount } = useCart();
@@ -75,7 +77,9 @@ const Navbar = ({ setShowCart, showCart }) => {
                 Zurpack
               </Link>
             </div>
-            
+              <div className="hidden md:block flex-1 mx-8">
+    <SearchBar />
+  </div>
             <div className="hidden md:flex items-center space-x-1">
               <NavLink to="/catalogo" icon={LayoutGrid}>Catálogo</NavLink>
               <NavLink to="/nosotros" icon={Users}>Nosotros</NavLink>
@@ -128,15 +132,29 @@ const Navbar = ({ setShowCart, showCart }) => {
             </div>
           </div>
 
-          {/* Menú móvil desplegable */}
-          {isMenuOpen && (
+      {/* Menú móvil desplegable */}
+      {isMenuOpen && (
             <div className="md:hidden bg-white border-t">
               <div className="flex flex-col">
+                <button
+                  onClick={() => setShowSearch(!showSearch)}
+                  className="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300 flex items-center gap-2"
+                >
+                  <Search className="w-5 h-5" />
+                  Buscar
+                </button>
                 <NavLink to="/catalogo" icon={LayoutGrid}>Catálogo</NavLink>
                 <NavLink to="/nosotros" icon={Users}>Nosotros</NavLink>
                 <NavLink to="/contacto" icon={MessageSquare}>Contacto</NavLink>
                 {admin && <NavLink to="/admin" icon={Settings}>Admin</NavLink>}
               </div>
+              
+              {/* Buscador en móvil */}
+              {showSearch && (
+                <div className="p-4 border-t">
+                  <SearchBar />
+                </div>
+              )}
             </div>
           )}
         </div>

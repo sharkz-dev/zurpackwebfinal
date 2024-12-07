@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
-import { Star, Plus, X } from 'lucide-react';
+import { Star, Plus, X, ChevronUp, ChevronDown } from 'lucide-react';
 
-const SizeVariantsManager = memo(({ variants = [], setVariants }) => {
+const SizeVariantsManager = ({ variants = [], setVariants }) => {
   const [newSize, setNewSize] = useState('');
 
   const addVariant = () => {
@@ -11,8 +11,27 @@ const SizeVariantsManager = memo(({ variants = [], setVariants }) => {
     }
   };
 
+  const updateVariant = (index, field, value) => {
+    const updatedVariants = [...variants];
+    updatedVariants[index] = { ...updatedVariants[index], [field]: value };
+    setVariants(updatedVariants);
+  };
+
+  const moveVariant = (index, direction) => {
+    if (
+      (direction === 'up' && index === 0) || 
+      (direction === 'down' && index === variants.length - 1)
+    ) return;
+
+    const newVariants = [...variants];
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    [newVariants[index], newVariants[swapIndex]] = [newVariants[swapIndex], newVariants[index]];
+    setVariants(newVariants);
+  };
+
   return (
     <div className="space-y-4">
+      {/* Input para nueva variante */}
       <div className="flex gap-2">
         <input
           type="text"
@@ -31,25 +50,63 @@ const SizeVariantsManager = memo(({ variants = [], setVariants }) => {
         </button>
       </div>
 
+      {/* Lista de variantes */}
       <div className="space-y-2">
         {variants.map((variant, index) => (
-          <div key={index} className="flex items-center gap-2 bg-gray-50 p-2 rounded-md">
-            <span className="flex-1">{variant.size}</span>
+          <div 
+            key={index} 
+            className="flex items-center gap-2 p-2 bg-gray-50 rounded-md border border-gray-200"
+          >
+            {/* Controles de orden */}
+            <div className="flex flex-col gap-1">
+              <button
+                type="button"
+                onClick={() => moveVariant(index, 'up')}
+                disabled={index === 0}
+                className={`p-1 rounded-md ${
+                  index === 0 ? 'text-gray-300' : 'text-gray-500 hover:bg-gray-200'
+                }`}
+              >
+                <ChevronUp className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => moveVariant(index, 'down')}
+                disabled={index === variants.length - 1}
+                className={`p-1 rounded-md ${
+                  index === variants.length - 1 ? 'text-gray-300' : 'text-gray-500 hover:bg-gray-200'
+                }`}
+              >
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Input de nombre de variante */}
+            <input
+              type="text"
+              value={variant.size}
+              onChange={(e) => updateVariant(index, 'size', e.target.value)}
+              className="flex-1 p-2 border rounded-md focus:ring-2 focus:ring-green-500"
+            />
+
+            {/* Control de disponibilidad */}
             <button
               type="button"
-              className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-              onClick={() => {
-                const newVariants = [...variants];
-                newVariants[index].isAvailable = !newVariants[index].isAvailable;
-                setVariants(newVariants);
-              }}
+              onClick={() => updateVariant(index, 'isAvailable', !variant.isAvailable)}
+              className={`px-3 py-1 rounded-md ${
+                variant.isAvailable 
+                  ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
             >
               {variant.isAvailable ? 'Disponible' : 'No disponible'}
             </button>
+
+            {/* Botón de eliminar */}
             <button
               type="button"
               onClick={() => setVariants(variants.filter((_, i) => i !== index))}
-              className="p-1 text-red-500 hover:bg-red-50 rounded-full"
+              className="p-1 text-red-500 hover:bg-red-50 rounded-md"
             >
               <X className="w-4 h-4" />
             </button>
@@ -58,7 +115,7 @@ const SizeVariantsManager = memo(({ variants = [], setVariants }) => {
       </div>
     </div>
   );
-});
+};
 
 const ProductForm = ({
   formData,
