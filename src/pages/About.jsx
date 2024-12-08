@@ -30,38 +30,17 @@ const About = ({ showCart: propShowCart, setShowCart: propSetShowCart }) => {
     {
       icon: <Target className="w-8 h-8 text-green-500" />,
       title: "Misión",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+      description: "Brindar soluciones integrales de empaque y embalaje que satisfagan las necesidades específicas de nuestros clientes, garantizando calidad, eficiencia y servicio personalizado en cada producto."
     },
     {
       icon: <Award className="w-8 h-8 text-green-500" />,
       title: "Visión",
-      description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+      description: "Ser la empresa líder en soluciones de empaque en el sur de Chile, reconocida por nuestra innovación, calidad y compromiso con la satisfacción de nuestros clientes."
     },
     {
       icon: <Briefcase className="w-8 h-8 text-green-500" />,
       title: "Compromiso",
-      description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-    }
-  ];
-
-  const team = [
-    {
-      name: "Gustavo Zurita",
-      position: "Gerente General",
-      image: "/api/placeholder/200/200",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    },
-    {
-      name: "Guiso de Mote",
-      position: "Directora Comercial",
-      image: "/api/placeholder/200/200",
-      description: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    },
-    {
-      name: "Nachoclo",
-      position: "Jefe de Producción",
-      image: "/api/placeholder/200/200",
-      description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+      description: "Trabajamos día a día para ofrecer productos de la más alta calidad, con un servicio cercano y personalizado que garantice el éxito de nuestros clientes en sus necesidades de empaque."
     }
   ];
 
@@ -73,7 +52,7 @@ const About = ({ showCart: propShowCart, setShowCart: propSetShowCart }) => {
           <div className="text-center">
             <h1 className="text-4xl sm:text-5xl font-bold mb-4">Sobre Nosotros</h1>
             <p className="text-lg sm:text-xl text-green-100 max-w-3xl mx-auto">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim placeat.
+            Somos tu aliado estratégico en soluciones de empaque y embalaje en el sur de Chile, comprometidos con la calidad y la excelencia en cada producto que ofrecemos.
             </p>
           </div>
         </div>
@@ -85,10 +64,10 @@ const About = ({ showCart: propShowCart, setShowCart: propSetShowCart }) => {
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Nuestra Historia</h2>
             <p className="text-gray-600 mb-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              Nuestra historia comenzó en el corazón de la Región de La Araucanía, donde desde nuestros inicios nos hemos dedicado a proporcionar soluciones integrales en envases y empaques para las empresas del sur de Chile.
             </p>
             <p className="text-gray-600">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              Establecidos en Temuco, nos hemos convertido en un socio estratégico para empresas que buscan la excelencia en el empaquetado de sus productos. Nuestro compromiso con la calidad y el servicio personalizado nos ha permitido crecer y evolucionar, adaptándonos constantemente a las necesidades cambiantes del mercado.
             </p>
           </div>
           <div className="relative h-64 sm:h-80 rounded-lg overflow-hidden shadow-lg">
@@ -139,7 +118,7 @@ const About = ({ showCart: propShowCart, setShowCart: propSetShowCart }) => {
               <div className="text-green-100">Empleados</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">5000+</div>
+              <div className="text-4xl font-bold mb-2">50000+</div>
               <div className="text-green-100">Productos Entregados</div>
             </div>
           </div>

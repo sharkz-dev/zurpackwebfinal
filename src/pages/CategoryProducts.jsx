@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Package } from 'lucide-react';
+import { ChevronLeft, Package, Search } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import ProductCard from '../components/ProductCard';
 import CartDrawer from '../components/CartDrawer';
 import QuotationForm from '../components/QuotationForm';
 import Toast from '../components/Toast';
+import { ALL_PRODUCTS_CATEGORY } from '../constants/categories';
 
 const CategoryProducts = ({ showCart, setShowCart }) => {
   const { categorySlug } = useParams();
   const navigate = useNavigate();
   const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showQuotationForm, setShowQuotationForm] = useState(false);
@@ -23,15 +26,26 @@ const CategoryProducts = ({ showCart, setShowCart }) => {
       try {
         setLoading(true);
         
-        const categoryResponse = await fetch(`${import.meta.env.VITE_API_URL}/categories/${categorySlug}`);
-        if (!categoryResponse.ok) throw new Error('Categoría no encontrada');
-        const categoryData = await categoryResponse.json();
-        setCategory(categoryData);
+        if (categorySlug === 'todos') {
+          setCategory(ALL_PRODUCTS_CATEGORY);
 
-        const productsResponse = await fetch(`${import.meta.env.VITE_API_URL}/products/by-category/${categorySlug}`);
-        if (!productsResponse.ok) throw new Error('Error al cargar los productos');
-        const productsData = await productsResponse.json();
-        setProducts(productsData);
+          const productsResponse = await fetch(`${import.meta.env.VITE_API_URL}/products`);
+          if (!productsResponse.ok) throw new Error('Error al cargar los productos');
+          const productsData = await productsResponse.json();
+          setProducts(productsData);
+          setFilteredProducts(productsData);
+        } else {
+          const categoryResponse = await fetch(`${import.meta.env.VITE_API_URL}/categories/${categorySlug}`);
+          if (!categoryResponse.ok) throw new Error('Categoría no encontrada');
+          const categoryData = await categoryResponse.json();
+          setCategory(categoryData);
+
+          const productsResponse = await fetch(`${import.meta.env.VITE_API_URL}/products/by-category/${categorySlug}`);
+          if (!productsResponse.ok) throw new Error('Error al cargar los productos');
+          const productsData = await productsResponse.json();
+          setProducts(productsData);
+          setFilteredProducts(productsData);
+        }
       } catch (error) {
         console.error('Error:', error);
         setError(error.message);
@@ -42,6 +56,19 @@ const CategoryProducts = ({ showCart, setShowCart }) => {
 
     fetchCategoryAndProducts();
   }, [categorySlug]);
+
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = products.filter(product => {
+        const productName = product.name.toLowerCase();
+        const search = searchTerm.toLowerCase();
+        return productName.includes(search);
+      });
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts(products);
+    }
+  }, [searchTerm, products]);
 
   const handleQuotationRequest = () => {
     setShowCart(false);
@@ -154,26 +181,53 @@ const CategoryProducts = ({ showCart, setShowCart }) => {
           </div>
         ) : (
           <>
-            <div className="mb-8 flex justify-between items-center">
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Productos disponibles
-                <span className="ml-2 text-lg text-gray-500">({products.length})</span>
-              </h2>
+            <div className="mb-8 space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-semibold text-gray-900">
+                  Productos disponibles
+                  <span className="ml-2 text-lg text-gray-500">({filteredProducts.length})</span>
+                </h2>
+              </div>
+
+              {/* Buscador */}
+              <div className="relative max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Buscar productos..."
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                />
+              </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-              {products.map(product => (
-                <div 
-                  key={product._id}
-                  className="transform transition-all duration-300 hover:-translate-y-1"
-                >
-                  <ProductCard
-                    product={product}
-                    categorySlug={categorySlug}
-                    compact={true}
-                  />
-                </div>
-              ))}
-            </div>
+
+            {filteredProducts.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
+                <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  No se encontraron productos
+                </h3>
+                <p className="text-gray-500 text-lg">
+                  No hay productos que coincidan con tu búsqueda
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+                {filteredProducts.map(product => (
+                  <div 
+                    key={product._id}
+                    className="transform transition-all duration-300 hover:-translate-y-1"
+                  >
+                    <ProductCard
+                      product={product}
+                      categorySlug={categorySlug === 'todos' ? product.category.slug : categorySlug}
+                      compact={true}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>

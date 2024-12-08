@@ -8,6 +8,7 @@ import QuotationForm from '../components/QuotationForm';
 import Advertisement from '../components/Advertisement';
 import CartDrawer from '../components/CartDrawer';
 import Toast from '../components/Toast';
+import { ALL_PRODUCTS_CATEGORY } from '../constants/categories';
 
 const CategoryCard = ({ category, index }) => {
   const [isInView, setIsInView] = useState(false);
@@ -72,6 +73,7 @@ const Catalog = ({ showCart, setShowCart }) => {
     setAddMessage('Carrito limpiado exitosamente');
     setTimeout(() => setAddMessage(null), 3000);
   };
+
   if (loading) {
     return (
       <div className="fixed inset-0 flex justify-center items-center bg-white">
@@ -153,8 +155,16 @@ const Catalog = ({ showCart, setShowCart }) => {
             </div>
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+              {/* Categoría "Todos los productos" al inicio */}
+              <CategoryCard category={ALL_PRODUCTS_CATEGORY} index={0} />
+              
+              {/* Resto de categorías */}
               {categories.map((category, index) => (
-                <CategoryCard key={category._id} category={category} index={index} />
+                <CategoryCard 
+                  key={category._id} 
+                  category={category} 
+                  index={index + 1}
+                />
               ))}
             </div>
           )}

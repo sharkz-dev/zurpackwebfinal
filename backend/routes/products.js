@@ -31,7 +31,7 @@ const getPublicIdFromUrl = (url) => {
   }
 };
 
-// Obtener todos los productos (ruta pública)
+// En routes/products.js
 router.get('/', async (req, res) => {
   try {
     console.log('Obteniendo todos los productos...');
@@ -42,7 +42,8 @@ router.get('/', async (req, res) => {
         select: 'name slug',
         match: { active: true }
       })
-      .sort({ createdAt: -1 });
+      .collation({ locale: 'es', strength: 2 }) // Para manejar correctamente los caracteres españoles
+      .sort({ name: 1 }); // 1 para orden ascendente alfabético
 
     // Filtrar productos donde la categoría existe y está activa
     const filteredProducts = products.filter(product => product.category);
